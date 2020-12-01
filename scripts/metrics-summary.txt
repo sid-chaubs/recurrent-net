@@ -1,0 +1,19 @@
+
+Analyzing network with training batch size: 500 and learning rate: 0.003 over 100 epochs
+
+              precision    recall  f1-score   support
+
+           1       1.00      0.99      0.99       996
+           2       0.99      1.00      0.99      1119
+           3       0.99      0.99      0.99      1011
+           4       1.00      0.98      0.99      1020
+           5       0.98      0.99      0.98       958
+           6       0.98      0.99      0.98       881
+           7       0.98      1.00      0.99       989
+           8       0.99      0.99      0.99      1051
+           9       0.99      0.98      0.98       978
+          10       0.99      0.97      0.98       997
+
+    accuracy                           0.99     10000
+   macro avg       0.99      0.99      0.99     10000
+weighted avg       0.99      0.99      0.99     10000

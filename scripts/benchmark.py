@@ -1,7 +1,7 @@
 import torch
 
 from architecture.checkpoint import Checkpoint
-from architecture.network import Network
+from architecture.networks.v1 import Network
 from architecture.metrics import Metrics
 from architecture.constants import TRAINING_CONFIGS
 from architecture.data.loader import Loader

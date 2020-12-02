@@ -1,8 +1,6 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
 *.py[cod]
 *$py.class
-**/__pycache__/
 
 # C extensionss
 *.so
@@ -134,3 +132,7 @@ dmypy.json
 
 # Project specific folders
 checkpoints/
+architecture/data/__pycache__/
+architecture/__pycache__/
+__pycache__/
+data/

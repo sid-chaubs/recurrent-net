@@ -1,4 +1,5 @@
-from architecture.network import Network
+from architecture.networks.v1 import Network as Base
+from architecture.networks.v2 import Network as Elman
 from architecture.checkpoint import Checkpoint
 
 import torch
@@ -9,8 +10,12 @@ import torch.optim as optim
 class Trainer:
 
   @staticmethod
-  def train(loader: data.dataloader, vocab_size: int, epochs: int, learning_rate: float, save: bool = True) -> [Network, list]:
-    model = Network(vocab_size = vocab_size)
+  def train(training_configs: data.dataloader, model_configs: int, save: bool = True) -> [object, list]:
+    loader = training_configs['loader']
+    epochs = training_configs['epochs']
+    learning_rate = training_configs['learning_rate']
+  
+    model = Elman(**model_configs)
 
     # update this
     loss_function = torch.nn.CrossEntropyLoss()
@@ -41,7 +46,7 @@ class Trainer:
 
       mean_loss /= loader.batch_size
       loss_history.append(mean_loss)
-
+      
     # save once we have trained the model over the given number of epochs
     if save:
       checkpoint = Checkpoint(model, loss_history, epochs, learning_rate, loader.batch_size, optimizer)

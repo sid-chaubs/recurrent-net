@@ -1,9 +1,7 @@
 from pathlib import Path
-from architecture.network import Network
+from architecture.networks.v1 import Network
 import torch
 import torch.optim
-import os
-import hashlib
 
 
 class Checkpoint:
@@ -17,15 +15,16 @@ class Checkpoint:
     self.optimizer = optimizer
 
   def save(self):
-    directory = Checkpoint.get_directory()
+    directory = Path(Checkpoint.get_directory(self.model.version))
+  
+    if not directory.exists():
+      directory.mkdir(parents = True)
 
-    if not os.path.isdir(directory):
-      os.mkdir(directory)
+    filepath = Path(Checkpoint.get_path(self.epochs, self.learning_rate, self.batch_size, self.model.version))
 
-    filepath = Checkpoint.get_path(self.epochs, self.learning_rate, self.batch_size)
-    if os.path.exists(filepath):
+    if filepath.exists():
       # delete the old file
-      os.remove(filepath)
+      filepath.unlink()
 
     torch.save({
       'model_state': self.model.state_dict(),
@@ -34,16 +33,19 @@ class Checkpoint:
       'loss_history': self.loss_history,
       'batch_size': self.batch_size,
       'learning_rate': self.learning_rate
-    }, filepath)
+    }, str(filepath.resolve()))
 
   @staticmethod
-  def get_directory():
-    return Path('../checkpoints').resolve()
+  def get_directory(version: str = ''):
+    if version == '':
+      return Path(f'../checkpoints').resolve()
+
+    return Path(f'../checkpoints/{version}').resolve()
 
   @staticmethod
   def get_filename(epochs: int, learning_rate: float, batch_size: int):
     return f'epochs-{epochs}-learning-rate-{learning_rate}-batch-size-{batch_size}'
 
   @staticmethod
-  def get_path(epochs: int, learning_rate: float, batch_size: int) -> str:
-    return f'{Checkpoint.get_directory()}/{Checkpoint.get_filename(epochs, learning_rate, batch_size)}.point'
+  def get_path(epochs: int, learning_rate: float, batch_size: int, version: str = '') -> str:
+    return f'{Checkpoint.get_directory(version)}/{Checkpoint.get_filename(epochs, learning_rate, batch_size)}.point'

@@ -35,7 +35,7 @@ setup(
   author = AUTHOR,
   author_email = AUTHOR_EMAIL,
   python_requires = PYTHON_VERSION,
-  packages = find_packages(['architecture', 'architecture.*']),
+  packages = find_packages(include = ['architecture', 'architecture.*']),
   entry_points = {},
   install_requires = REQUIRED,
   extras_require = {},

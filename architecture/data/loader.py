@@ -1,6 +1,6 @@
 from architecture.data.dataset import IMDBDataset
 from architecture.data.fetcher import Fetcher
-from architecture.constants import DEFAULT_BATCH_SIZE
+from architecture.constants import DEFAULT_DATA_BATCH_SIZE
 
 import torch.utils.data as data
 from copy import deepcopy
@@ -8,8 +8,8 @@ import torch
 
 
 class Loader:
-  
-  def __init__(self, batch_size = DEFAULT_BATCH_SIZE, final = False):
+
+  def __init__(self, batch_size = DEFAULT_DATA_BATCH_SIZE, final = False):
     self.final = final
     self.training_loader = None
     self.benchmarking_loader = None
@@ -20,7 +20,7 @@ class Loader:
 
   def pad(self, batch, token: int = 0):
     inputs, labels = zip(*deepcopy(batch))
-    
+
     padded = deepcopy(inputs)
     max_len = len(max(inputs, key = len))
 

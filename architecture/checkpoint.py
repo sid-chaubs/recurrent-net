@@ -1,12 +1,12 @@
 from pathlib import Path
-from architecture.networks.v1 import Network
 import torch
 import torch.optim
+import torch.nn as nn
 
 
 class Checkpoint:
-  
-  def __init__(self, model: Network, loss_history: list, epochs: int, learning_rate: float, batch_size: int, optimizer: torch.optim):
+
+  def __init__(self, model: nn.Module, loss_history: list, epochs: int, learning_rate: float, batch_size: int, optimizer: torch.optim):
     self.model = model
     self.loss_history = loss_history
     self.epochs = epochs
@@ -15,12 +15,12 @@ class Checkpoint:
     self.optimizer = optimizer
 
   def save(self):
-    directory = Path(Checkpoint.get_directory(self.model.version))
-  
+    directory = Path(Checkpoint.get_directory(self.model.variation))
+
     if not directory.exists():
       directory.mkdir(parents = True)
 
-    filepath = Path(Checkpoint.get_path(self.epochs, self.learning_rate, self.batch_size, self.model.version))
+    filepath = Path(Checkpoint.get_path(self.epochs, self.learning_rate, self.batch_size, self.model.variation))
 
     if filepath.exists():
       # delete the old file
@@ -36,16 +36,16 @@ class Checkpoint:
     }, str(filepath.resolve()))
 
   @staticmethod
-  def get_directory(version: str = ''):
-    if version == '':
+  def get_directory(variation: str = ''):
+    if variation == '':
       return Path(f'../checkpoints').resolve()
 
-    return Path(f'../checkpoints/{version}').resolve()
+    return Path(f'../checkpoints/{variation}').resolve()
 
   @staticmethod
   def get_filename(epochs: int, learning_rate: float, batch_size: int):
     return f'epochs-{epochs}-learning-rate-{learning_rate}-batch-size-{batch_size}'
 
   @staticmethod
-  def get_path(epochs: int, learning_rate: float, batch_size: int, version: str = '') -> str:
-    return f'{Checkpoint.get_directory(version)}/{Checkpoint.get_filename(epochs, learning_rate, batch_size)}.point'
+  def get_path(epochs: int, learning_rate: float, batch_size: int, variation: str = '') -> str:
+    return f'{Checkpoint.get_directory(variation)}/{Checkpoint.get_filename(epochs, learning_rate, batch_size)}.point'

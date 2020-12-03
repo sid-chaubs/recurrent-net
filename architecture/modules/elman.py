@@ -3,7 +3,7 @@ import torch.nn.functional as functional
 
 
 class Elman(torch.nn.Module):
-  
+
   def __init__(self, in_features: int = 300, out_features: int = 300, context_features: int = 300):
     super(Elman, self).__init__()
 

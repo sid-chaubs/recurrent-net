@@ -136,3 +136,4 @@ architecture/data/__pycache__/
 architecture/__pycache__/
 __pycache__/
 data/
+logs/

@@ -11,9 +11,9 @@ class IMDBDataset(data.Dataset):
 
     self.inputs = inputs
     self.labels = labels
-    
+
   def __getitem__(self, idx):
     return self.inputs[idx], self.labels[idx]
-  
+
   def __len__(self):
     return len(self.inputs)

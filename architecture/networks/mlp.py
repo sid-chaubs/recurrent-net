@@ -1,13 +1,14 @@
 import torch
 import torch.nn.functional as functional
+from architecture.constants import MODEL_VARIATION_MLP
 
 
-class Network(torch.nn.Module):
+class MLP(torch.nn.Module):
 
   def __init__(self, vocab_size: int, hidden: int = 300, num_cls: int = 2):
-    super(Network, self).__init__()
- 
-    self.version = 'v.0.0.1'
+    super(MLP, self).__init__()
+
+    self.variation = MODEL_VARIATION_MLP
     self.num_cls = num_cls
     self.embeddings = torch.nn.Embedding(num_embeddings = vocab_size, embedding_dim = hidden)
     self.linear1 = torch.nn.Linear(in_features = hidden, out_features = hidden)

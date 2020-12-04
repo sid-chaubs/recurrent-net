@@ -8,7 +8,7 @@ import os
 plot_id = 0
 for key, config in TRAINING_CONFIGS.items():
   plot_id += 1
-  
+
   epochs = config['epochs']
   learning_rate = config['learning_rate']
   batch_size = config['batch_size']

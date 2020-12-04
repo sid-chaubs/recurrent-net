@@ -1,58 +1,64 @@
 import torch
 
-from architecture.checkpoint import Checkpoint
-from architecture.networks.v1 import Network
+from architecture.trainer import Trainer
 from architecture.metrics import Metrics
-from architecture.constants import TRAINING_CONFIGS
+from architecture.constants import *
 from architecture.data.loader import Loader
 import numpy
+import json
+from copy import deepcopy
 
-print('Downloading data...')
 loader = Loader(final = False)
-
-# if this is set to True, we will run the script using testing data else we will run it using validation data
 loader.hydrate()
-print('Download complete...')
 
-output = ''
+model_configs = {
+  'vocab_size': len(loader.word_index_map)
+}
 
-for key, config in TRAINING_CONFIGS.items():
-    epochs = config['epochs']
+output = deepcopy(TRAINING_CONFIGS)
+for variation in MODEL_VARIATIONS:
+  print('Train model version ' + str(variation))
+  
+  for index, config in TRAINING_CONFIGS.items():
     learning_rate = config['learning_rate']
     batch_size = config['batch_size']
-  
-    filepath = Checkpoint.get_path(epochs, learning_rate, batch_size)
-    checkpoint = torch.load(filepath)
-  
-    # set the data loader
-    data_loader = loader.benchmarking_loader
+    epochs = config['epochs']
 
-    # load the network
-    model = Network(vocab_size = len(loader.word_index_map))
-    model_state = checkpoint['model_state']
-    model.load_state_dict(model_state)
+    loader = Loader(batch_size = batch_size)
+    loader.hydrate()
 
+    configs = {
+      'model': {
+        'vocab_size': len(loader.word_index_map)
+      },
+      'variation': variation,
+      'loader': loader.training_loader,
+      'learning_rate': learning_rate,
+      'epochs': epochs
+    }
+
+    trainer = Trainer()
+    model, loss_history = trainer.train(variation, configs)
+
+    # benchmark the currently trained model
     num_correct = 0
     num_samples = 0
-
-    predicted = list()
-    data = iter(data_loader)
-
+  
+    benchmarking_data = iter(loader.benchmarking_loader)
+  
     predictions = list()
     labels = list()
-
+  
     with torch.no_grad():
       while True:
         try:
-          batch_inputs, batch_labels = data.next()
+          benchmarking_inputs, benchmarking_labels = benchmarking_data.next()
         except StopIteration:
           break
-    
-        _, result = model(batch_inputs).max(1)
+  
+        _, result = model(benchmarking_inputs).max(1)
         predictions.extend(numpy.asarray(result))
-        labels.extend(batch_labels.detach().numpy())
-
-    output += Metrics.summary(labels, predictions)
-
-
-print(output)
+        labels.extend(benchmarking_labels.detach().numpy())
+    
+    config['accuracy'] = Metrics.accuracy(predictions, labels)
+    print(config)

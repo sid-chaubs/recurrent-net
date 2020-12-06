@@ -26,4 +26,4 @@ for variation in MODEL_VARIATIONS:
 
     if not os.path.exists(Checkpoint.get_path(epochs, learning_rate, batch_size, variation)):
       trainer = Trainer()
-      model, loss_history = trainer.train(configs, save = True)
+      model, loss_history = trainer.train(variation, configs, save = True)

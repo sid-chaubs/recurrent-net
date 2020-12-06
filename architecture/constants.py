@@ -15,56 +15,56 @@ MODEL_VARIATION_PYTORCH_LSTM = 'pytorch-lstm'
 
 MODEL_VARIATIONS = [
   MODEL_VARIATION_MLP,
-  MODEL_VARIATION_ELMAN,
+  # MODEL_VARIATION_ELMAN, TODO: Train this using a GPU
   # TODO: Add PyTorch LSTM, ELMAN
   # MODEL_VARIATION_PYTORCH_ELMAN,
   # MODEL_VARIATION_PYTORCH_LSTM,
 ]
 
 TRAINING_CONFIGS = {
-    1: {
-      'learning_rate': 0.002,
-      'batch_size': 100,
-      'epochs': 1
-    },
-    2: {
-      'learning_rate': 0.003,
-      'batch_size': 100,
-      'epochs': 1
-    },
-    3: {
-      'learning_rate': 0.004,
-      'batch_size': 100,
-      'epochs': 1
-    },
-    4: {
-      'learning_rate': 0.005,
-      'batch_size': 100,
-      'epochs': 1
-    },
-    5: {
-      'learning_rate': 0.007,
-      'batch_size': 100,
-      'epochs': 1
-    },
-    6: {
-      'learning_rate': 0.009,
-      'batch_size': 100,
-      'epochs': 1
-    },
-    8: {
-      'learning_rate': 0.01,
-      'batch_size': 100,
-      'epochs': 1
-    },
-    9: {
-      'learning_rate': 0.0125,
-      'batch_size': 100,
-      'epochs': 1
-    },
-    10: {
-      'learning_rate': 0.025,
-      'batch_size': 100,
-      'epochs': 1
-    }
+  1: {
+    'learning_rate': 0.002,
+    'batch_size': 100,
+    'epochs': 5
+  },
+  2: {
+    'learning_rate': 0.003,
+    'batch_size': 100,
+    'epochs': 5
+  },
+  3: {
+    'learning_rate': 0.004,
+    'batch_size': 100,
+    'epochs': 5
+  },
+  4: {
+    'learning_rate': 0.005,
+    'batch_size': 100,
+    'epochs': 5
+  },
+  5: {
+    'learning_rate': 0.007,
+    'batch_size': 100,
+    'epochs': 5
+  },
+  6: {
+    'learning_rate': 0.009,
+    'batch_size': 100,
+    'epochs': 5
+  },
+  8: {
+    'learning_rate': 0.01,
+    'batch_size': 100,
+    'epochs': 5
+  },
+  9: {
+    'learning_rate': 0.0125,
+    'batch_size': 100,
+    'epochs': 5
+  },
+  10: {
+    'learning_rate': 0.025,
+    'batch_size': 100,
+    'epochs': 5
+  }
 }

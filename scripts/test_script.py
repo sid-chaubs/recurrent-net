@@ -1,27 +1,29 @@
-from architecture.constants import TRAINING_CONFIGS
+from architecture.constants import *
 from architecture.data.loader import Loader
 from architecture.trainer import Trainer
+from architecture.checkpoint import Checkpoint
 
-print('Downloading data...')
-loader = Loader()
-loader.hydrate()
-print('Download complete...')
+import os
 
-# set this to false if you don't want to retrain your models for specific configs
-retrain = True
+for variation in MODEL_VARIATIONS:
+  for index, config in TRAINING_CONFIGS.items():
+    learning_rate = config['learning_rate']
+    batch_size = config['batch_size']
+    epochs = config['epochs']
 
-for index, config in TRAINING_CONFIGS.items():
-  learning_rate = config['learning_rate']
-  batch_size = config['batch_size']
-  epochs = config['epochs']
+    loader = Loader(batch_size = batch_size)
+    loader.hydrate()
 
-  print(f'Training network with training batch size: {batch_size} and learning rate: {learning_rate} over {epochs} epoch(s).')
+    configs = {
+      'model': {
+        'vocab_size': len(loader.word_index_map)
+      },
+      'variation': variation,
+      'loader': loader.training_loader,
+      'learning_rate': learning_rate,
+      'epochs': epochs
+    }
 
-  trainer = Trainer()
-  model, loss_history = trainer.train(
-    loader = loader.training_loader,
-    vocab_size = len(loader.word_index_map),
-    epochs = epochs,
-    learning_rate = learning_rate,
-    save = True
-  )
+    if not os.path.exists(Checkpoint.get_path(epochs, learning_rate, batch_size, variation)):
+      trainer = Trainer()
+      model, loss_history = trainer.train(variation, configs, save = True)
